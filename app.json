@@ -4,11 +4,12 @@
     "slug": "BeerCounterApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "src/assets/images/icon.png",
+    "main": "src/app/Index.js",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "src/assets/images/bg01.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "src/assets/images/bb01.jpg",
         "backgroundColor": "#ffffff"
       }
     },

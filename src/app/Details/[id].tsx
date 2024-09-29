@@ -1,8 +1,7 @@
 import { View, Text, StyleSheet, StatusBar, Button, Image, ImageBackground, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from 'expo-router'
 // import { useNavigation } from '@react-navigation/native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 interface DataItem {
   title: string;
@@ -20,7 +19,7 @@ const Details: React.FC = () => {
     // Fetch data from AsyncStorage and update the state
     const fetchData = async () => {
       const sortedData = await getAllDataSortedByDate();
-     
+
       // Format the data to match the required FlatList structure
       const formattedData = (sortedData || []).map((item, index) => ({
         title: 'Title Text', // Placeholder title, update if needed
@@ -28,7 +27,7 @@ const Details: React.FC = () => {
         beer: item.value.toString(), // Assuming values are numbers
         key: `item${index}`,
       }));
-    
+
       setData(formattedData);
     };
 
@@ -47,18 +46,19 @@ const Details: React.FC = () => {
       const data = keyValuePairs.map(([key, value]) => ({
         date: key,
         value: value ? parseFloat(value) : 0,
-       
+
       }));
-      
-      console.log(data);
-      data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      return data;
-      
+
+      // console.log(data);
+      // data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      return data.reverse();
+  
+
     } catch (e) {
-      return [];
       console.log('Error fetching and sorting data by date', e);
+      return [];
     }
-  };alert
+  }; alert
 
   const _onPress = (item: { title: string, key: string }) => {
     console.log('Item pressed:', item);
@@ -89,7 +89,7 @@ const Details: React.FC = () => {
         </View>
 
         <View style={styles.blackBoardTextContainer}>
-          <View style={[styles.Details, {marginBottom: 20}]}>
+          <View style={[styles.Details, { marginBottom: 20 }]}>
             <Text style={[styles.detailsText, { color: 'pink', textTransform: 'uppercase', borderBottomWidth: 1, borderBottomColor: 'pink' }]}> Date </Text>
             <Text style={[styles.detailsText, , { color: 'pink', textTransform: 'uppercase', borderBottomWidth: 1, borderBottomColor: 'pink' }]}> Beers </Text>
           </View>
@@ -114,11 +114,11 @@ const Details: React.FC = () => {
           />
         </View>
 
-          <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-            <View>
-              <Text style={styles.buttonText}>OK</Text>
-            </View>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+          <View>
+            <Text style={styles.buttonText}>OK</Text>
+          </View>
+        </TouchableOpacity>
       </ImageBackground>
 
     </View>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     bottom: 33,
     right: 40,
-    position:'absolute',
+    position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
     width: 70

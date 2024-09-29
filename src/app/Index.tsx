@@ -103,7 +103,8 @@ const Index = () => {
 
         {/* Image in bottom-left corner */}
         <View style={styles.doneForTodayContainer}>
-          <TouchableOpacity onPress={goToDetailsPage}>
+          <TouchableOpacity activeOpacity={1} // This removes the fade effect
+           onPress={goToDetailsPage}>
             <Image
               source={require('../assets/images/donefortoday.png')}
               resizeMode='contain'
@@ -130,8 +131,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     top: 270,
-    borderColor: 'red',
-    borderWidth: 1
+    // borderColor: 'red',
+    // borderWidth: 1
   },
   calenderTextContainer: {
     position: 'absolute',
@@ -140,8 +141,8 @@ const styles = StyleSheet.create({
     left: 30,
     top: 305,
     transform: [{ rotate: '22deg' }],
-    borderColor: 'red',
-    borderWidth: 1
+    // borderColor: 'red',
+    // borderWidth: 1
   },
   counterContainer: {
     position: 'absolute',

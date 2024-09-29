@@ -101,16 +101,20 @@ const storeOrUpdateData = async (key: string, newValue: string) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handlePress} onLongPress={handleLongPress}>
+      <TouchableOpacity activeOpacity={1} // This removes the fade effect
+      onPress={handlePress} onLongPress={handleLongPress}>
         <Animated.Image
           source={require('../assets/images/counter.png')} // Replace with your beer cap image URL
           style={[styles.image, { transform: [{ rotate }, { translateX: shake }] }]}
         />
-        <View style={{position: 'absolute', left:0, top:0, flex:1,
-            borderWidth:1, borderColor:'red', justifyContent:'center',
+        <View style={{position: 'absolute', left:0, top:0, flex:1, height:200, width:200,
+            // borderWidth:1, borderColor:'red', 
+            justifyContent:'center',
             alignItems:'center'}}>
             <Text 
-              style={[ styles.counterText,{ color: 'white', borderWidth:1, top: 15, left: 35 }]}>
+              style={[ styles.counterText,{ color: 'white',
+              //  borderWidth:1 
+               }]}>
               {count}
             </Text>
         </View>
@@ -132,7 +136,9 @@ const styles = StyleSheet.create({
   },
 
   counterText: {
-    fontSize: 80
+    fontSize: 80,
+    // height:200,
+    //  width:200
   }
 });
 
