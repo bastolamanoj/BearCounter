@@ -1,15 +1,14 @@
 {
   "expo": {
-    "name": "BeerCounterApp",
-    "slug": "BeerCounterApp",
+    "name": "BeerCounter",
+    "slug": "BeerCounter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "src/assets/images/icon.png",
-    "main": "src/app/Index.js",
-    "scheme": "myapp",
+    "icon": "./assets/images/icon.png",
+    "scheme": "BeerCounter",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "src/assets/images/bg01.jpg",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,9 +17,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "src/assets/images/bb01.jpg",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.manojbastola.BeerCounter"
     },
     "web": {
       "bundler": "metro",
@@ -32,6 +32,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ced5e862-1c92-4a59-97d1-7cb984647174"
+      }
     }
   }
 }

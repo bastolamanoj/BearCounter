@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { View, Image, Animated, Text, TouchableOpacity, StyleSheet, Easing } from 'react-native';
+import { View, Image, Animated, Text, TouchableOpacity, TouchableWithoutFeedback,StyleSheet, Easing,Vibration  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
 interface ShakeableViewProps {
   plusCount: Function;
@@ -9,103 +11,69 @@ interface ShakeableViewProps {
 }
 
 const ShakeableView: React.FC<ShakeableViewProps> = ({plusCount, minusCount, count}) => {
-// const ShakeableView = ({setCount}) => {
 
-  const rotateValue = useRef(new Animated.Value(0)).current; // Initial rotation value
-  const shakeValue = useRef(new Animated.Value(0)).current; // Initial shake value
-  const [shaking, setShaking] = useState(false); // Track if shake animation is running
-  // const [count, setCount] = useState<number>(0);
+  const rotateValue = useRef(new Animated.Value(0)).current;
 
-const storeOrUpdateData = async (key: string, newValue: string) => {
-  try {
-    const existingValue = await AsyncStorage.getItem(key);
+  const startRotation = () => {
+      rotateValue.setValue(0); // Reset rotation value
+      
+      // Repeat the animation 5 times
+      let repeatCount = 5; // Define the total repeat count
+  
+      const rotateAnimation = (isReversed: boolean, count: number) => {
+          if (count === 0) return; // Stop when count reaches 0
+  
+          Animated.timing(rotateValue, {
+              toValue: isReversed ? 0 : 1, // Rotate from 0 to 1
+              duration: 50, // Duration of the rotation
+              useNativeDriver: true,
+          }).start(() => {
+              rotateValue.setValue(isReversed ? 1 : 0); // Reset for the next repetition
+              rotateAnimation(!isReversed, count - 1); // Reverse direction and decrement count
+          });
+      };
+  
+      rotateAnimation(false, repeatCount); // Start the animation
+  };
+  const rotateInterpolate = rotateValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['-5deg', '5deg'], // Rotate between -5 and 5 degrees
+  });
 
-    if (existingValue !== null) {
-      console.log('Key exists. Updating value...');
-      await AsyncStorage.setItem(key, newValue);
-    } else {
-      console.log('Key does not exist. Creating new key-value pair...');
-      await AsyncStorage.setItem(key, newValue);
-    }
-  } catch (e) {
-    console.log('Error checking key or updating value', e);
+  const [fontsLoaded] = useFonts({
+    'MyCustomFont': require('../assets/fonts/28_Days_Later.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
-};
-
-
-  // Function to rotate the image
-  const rotateAnimation = () => {
-    Animated.loop(
-      Animated.timing(rotateValue, {
-        toValue: 1,
-        duration: 500,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-      { iterations: 2 }
-    ).start(() => rotateValue.setValue(0)); // Reset to 0 after animation
-  };
-
-  // Function to shake the image
-  const shakeAnimation = () => {
-    if (!shaking) {
-      setShaking(true);
-      Animated.sequence([
-        Animated.timing(shakeValue, {
-          toValue: 10,
-          duration: 50,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shakeValue, {
-          toValue: -10,
-          duration: 50,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shakeValue, {
-          toValue: 0,
-          duration: 50,
-          useNativeDriver: true,
-        }),
-      ]).start(() => setShaking(false));
-    }
-  };
 
   // Handle press event
   const handlePress = () => {
-    rotateAnimation(); // Start rotating on press
-    shakeAnimation(); // Start shaking on press
+    Vibration.vibrate(100);
+   startRotation();
     plusCount();
   };
 
   // Handle long press event
   const handleLongPress = () => {
-    rotateAnimation(); // Start rotating on long press
-    shakeAnimation(); // Start shaking on long press
+    Vibration.vibrate(100);
+    startRotation();
     if(count > 0){
       minusCount();
 
     }
   };
 
-  // Interpolating rotate animation value
-  const rotate = rotateValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
-
-  // Interpolating shake translation value
-  const shake = shakeValue.interpolate({
-    inputRange: [-10, 10],
-    outputRange: [-10, 10],
-  });
 
   return (
     <View style={styles.container}>
       <TouchableOpacity activeOpacity={1} // This removes the fade effect
       onPress={handlePress} onLongPress={handleLongPress}>
-        <Animated.Image
+        <Animated.Image style={[styles.image,{ transform: [{ rotate: rotateInterpolate }] }]}
           source={require('../assets/images/counter.png')} // Replace with your beer cap image URL
-          style={[styles.image, { transform: [{ rotate }, { translateX: shake }] }]}
+          // style={[styles.image, { transform: [{ rotate }, { translateX: shake }] }]}
+          // style={[styles.image]}
         />
         <View style={{position: 'absolute', left:0, top:0, flex:1, height:200, width:200,
             // borderWidth:1, borderColor:'red', 
@@ -137,6 +105,7 @@ const styles = StyleSheet.create({
 
   counterText: {
     fontSize: 80,
+    fontFamily: 'MyCustomFont'
     // height:200,
     //  width:200
   }
